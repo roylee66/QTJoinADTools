@@ -19,10 +19,11 @@ QtWidgetsApplication1::~QtWidgetsApplication1()
 {}
 
 
-void QtWidgetsApplication1::on_pushButton_clicked()
+void QtWidgetsApplication1::on_pushButton_clicked()//pushbutton按下
 {
-    m_temp->show();// 这样你每次调用的都是这一个窗口
-
+   // m_temp->show();// 这样你每次调用的都是这一个窗口
+    //system("ipconfig&pause"); //多行用&连接 system直接调用cmd窗口
+ 
     if (ui.pushButton_2->isCheckable()) {        //切换按钮状态
         ui.pushButton_2->setCheckable(false);
     }
