@@ -101,6 +101,11 @@ void QtWidgetsApplication1::on_pushButton_5_clicked()//pushbutton5按下 退域
 //    }
 //};
 
+void QtWidgetsApplication1::on_pushButton_6_clicked() 
+{
+    system("cd Tools&dir /b&echo.&echo.&cmd /k&");
+    
+};
 void QtWidgetsApplication1::iptest()
 {
     ui.label_ip->setText(QString::fromLocal8Bit("备用Label"  ));//lable定义文本

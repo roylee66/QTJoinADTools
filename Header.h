@@ -30,6 +30,7 @@ public slots:
     void on_pushButton_3_clicked();
     void on_pushButton_4_clicked();
     void on_pushButton_5_clicked();
+    void on_pushButton_6_clicked();
     //void on_checkBox_stateChanged(int arg1);
     void iptest();
 
