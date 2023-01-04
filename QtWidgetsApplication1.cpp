@@ -3,11 +3,14 @@
 #include <QProcess>
 #include <iostream>
 
+
 QtWidgetsApplication1::QtWidgetsApplication1(QWidget* parent)
     : QMainWindow(parent)
 {
     ui.setupUi(this);
     ui.label_test->setText(QString::fromLocal8Bit("域账户:"));//lable定义文本
+    iptest();
+
     // ui.lineEdit->clear();//清空
     // ui.lineEdit->setEchoMode(QLineEdit::Normal);//正常模式Normal；密码模式Password；不回显NoEcho；失去焦点变密码模式Password
     // ui.lineEdit->setPlaceholderText("Normal");//占位字符Normal
@@ -19,12 +22,11 @@ QtWidgetsApplication1::QtWidgetsApplication1(QWidget* parent)
     //}
 };
 
-
-
 QtWidgetsApplication1::~QtWidgetsApplication1()
-{}
-
+{
+};
 // m_temp->show();// 这样你每次调用的都是这一个窗口
+
 void QtWidgetsApplication1::on_pushButton_clicked()//计算机属性
 {
 
@@ -32,12 +34,17 @@ void QtWidgetsApplication1::on_pushButton_clicked()//计算机属性
     //system("sysdm.cpl");//系统属性
    // system("compmgmt.msc");//计算机属性
 
+  /*  
+    // 此方法堵塞线程
     QProcess compmgmt(0);
     compmgmt.start("cmd", QStringList() << "/c" << "compmgmt.msc");
     compmgmt.waitForStarted();
-    compmgmt.waitForFinished();
-}   
+    compmgmt.waitForFinished();*/
 
+    // 此方法为创建一个线程，并给它空间
+    QProcess* process = new QProcess(this);
+    process->start("cmd", QStringList() << "/c" << "compmgmt.msc");
+}   
 void QtWidgetsApplication1::on_pushButton_2_clicked()//系统属性
 {
      //system("sysdm.cpl");//系统属性
@@ -47,68 +54,55 @@ void QtWidgetsApplication1::on_pushButton_2_clicked()//系统属性
     sysdm.waitForStarted();
     sysdm.waitForFinished();
 }
-
 void QtWidgetsApplication1::on_pushButton_3_clicked()//pushbutton3 加组
 {
-    //netdom join %computername% /domain:” ＋ 域名 ＋ “ /UserD:” ＋ A用户名 ＋ “ /PasswordD:” ＋ A密码 //加域
-    // 
-   // if (ui.lineEdit->text() = "");
-   // {
-   //     QMessageBox::information(this, QString::fromLocal8Bit("提示"),"用户名不能为空");//弹窗
-   // }
-   // else()
-   // {
-        //信息框(取DOS返回文本1(“net localgroup administrators ” ＋ 用户名 ＋ “ / add”), 0, , )
-    //};
-
     if (ui.lineEdit->text() != "")
-    { 
-        QProcess net(0);
-        net.start("cmd", QStringList() << "/c net localgroup administrators " + ui.lineEdit->text() + " / add");
-        net.waitForStarted();
-        net.waitForFinished();
-        QString strTemp = QString::fromLocal8Bit(net.readAllStandardOutput());
+    {
+        QString yuzhanghao = ui.lineEdit->text();
+ //       char* yuzhanghao_ch = yuzhanghao.toLatin1().data();
+        QString strCmd = "net localgroup administrators " + yuzhanghao + " /add&pause";
+       // const char* cCmd = strCmd.toStdString().c_str();
+        system(strCmd.toStdString().c_str());//权限
 
-        QMessageBox testMassage;
-        testMassage.setText(strTemp);
-        testMassage.exec();
+       // system("net localgroup administrators " + ui.lineEdit->text()+" /add&pause");//权限
     }
     else{
         QMessageBox::information(this, QString::fromLocal8Bit("提示"), QString::fromLocal8Bit("用户名不能空."));//弹窗
         }
 }
-
-void QtWidgetsApplication1::on_pushButton_4_clicked()//pushbutton4按下
+void QtWidgetsApplication1::on_pushButton_4_clicked()//pushbutton4按下 加域
 {
-    QProcess p(0);
-    p.start("cmd", QStringList() << "/c" << "ping www.baidu.com");
-    p.waitForStarted();
-    p.waitForFinished();
-    QString strTemp = QString::fromLocal8Bit(p.readAllStandardOutput());  //获得输出
+        QString strCmd = "netdom join %computername% /domain:" + adadrrs + " /UserD : " + aduser + " /PasswordD : " + adpsw+"&pause"; //加域
+        //// const char* cCmd = strCmd.toStdString().c_str();
+        system(strCmd.toStdString().c_str());//权限
+        //system("netdom join % computername % / domain:hf.huafangtec.cn / UserD : lilei-hj / PasswordD : ASD!@#123");//0
+        //system("netdom join % computername % / domain:hf.huafangtec.cn / UserD : lilei-hj / PasswordD : ASD!@#123");//1
+}
+void QtWidgetsApplication1::on_pushButton_5_clicked()//pushbutton5按下 退域
+{
+    QString strCmd = "netdom join %computername% /domain:" + adadrrs + " /UserD : " + aduser + " /PasswordD : " + adpsw + "&pause"; //加域
+    //// const char* cCmd = strCmd.toStdString().c_str();
+    system(strCmd.toStdString().c_str());//权限
+}
+//void QtWidgetsApplication1::on_checkBox_stateChanged(int arg1)
+//{
+//    {
+//        if (arg1 == Qt::Checked) // "选中"
+//        {
+//            // 置顶，this指当前的窗口
+//            QtWidgetsApplication1::SetWindowPos(HWND(this->winId()), HWND_TOPMOST, 0, 0, 0, 0, SWP_NOMOVE | SWP_NOSIZE | SWP_SHOWWINDOW);
+//        }
+//        else                   // 未选中 - Qt::Unchecked
+//        {
+//            // 不置顶
+//            QtWidgetsApplication1::SetWindowPos(HWND(this->winId()), HWND_NOTOPMOST, 0, 0, 0, 0, SWP_NOMOVE | SWP_NOSIZE | SWP_SHOWWINDOW);
+//        }
+//
+//    }
+//};
 
-        QMessageBox testMassage;
-        testMassage.setText(strTemp);
-        testMassage.exec();
+void QtWidgetsApplication1::iptest()
+{
+    ui.label_ip->setText(QString::fromLocal8Bit("备用Label"  ));//lable定义文本
 };
 
-void QtWidgetsApplication1::on_pushButton_5_clicked()//pushbutton5按下
-{
-    //ui.label_test->setText(ui.lineEdit->text());//lable定义文本
-
-    //QProcess process(this);
-    //process.setProgram("cmd");
-    //QStringList argument;
-    //argument << "/c" << ui.lineEdit->text();
-    //process.setArguments(argument);
-    //process.start();
-    //process.waitForStarted(); //等待程序启动
-    //process.waitForFinished();//等待程序关闭
-    //QString temp = QString::fromLocal8Bit(process.readAllStandardOutput()); //程序输出信息
-    //QMessageBox testMassage;
-    //testMassage.setText(temp);
-    //testMassage.exec();
-
-
-
-    system("net localgroup administrators liujunjie-hj /add&pause");//权限不足
-};

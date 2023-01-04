@@ -13,4 +13,5 @@ public:
 
 private:
 	Ui::QtTempClassClass ui;
+	//void closeEvent(QCloseEvent* event);
 };
