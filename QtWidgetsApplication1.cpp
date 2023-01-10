@@ -2,15 +2,29 @@
 #include "Header.h"
 #include <QProcess>
 #include <iostream>
+#include <QTime>
+#include <QtNetwork>
+#include <QNetworkRequest>
+#include <QNetworkAccessManager>
+#include <QNetworkReply>
+#include<windows.h>
 
+
+//QByteArray  m_text = "123456ABC";
+//m_text = m_text.toBase64();//加密
+//QByteArray::fromBase64(m_text)//解密
 
 QtWidgetsApplication1::QtWidgetsApplication1(QWidget* parent)
     : QMainWindow(parent)
 {
+    
     ui.setupUi(this);
+    ver();
     ui.label_test->setText(QString::fromLocal8Bit("域账户:"));//lable定义文本
     iptest();
 
+
+    
     // ui.lineEdit->clear();//清空
     // ui.lineEdit->setEchoMode(QLineEdit::Normal);//正常模式Normal；密码模式Password；不回显NoEcho；失去焦点变密码模式Password
     // ui.lineEdit->setPlaceholderText("Normal");//占位字符Normal
@@ -24,8 +38,9 @@ QtWidgetsApplication1::QtWidgetsApplication1(QWidget* parent)
 
 QtWidgetsApplication1::~QtWidgetsApplication1()
 {
+    // m_temp->show();// 这样你每次调用的都是这一个窗口
+
 };
-// m_temp->show();// 这样你每次调用的都是这一个窗口
 
 void QtWidgetsApplication1::on_pushButton_clicked()//计算机属性
 {
@@ -101,13 +116,51 @@ void QtWidgetsApplication1::on_pushButton_5_clicked()//pushbutton5按下 退域
 //    }
 //};
 
-void QtWidgetsApplication1::on_pushButton_6_clicked() 
+void QtWidgetsApplication1::on_pushButton_6_clicked()//CMD
 {
     system("cd Tools&dir /b&echo.&echo.&cmd /k&");
-    
+
 };
-void QtWidgetsApplication1::iptest()
+void QtWidgetsApplication1::iptest()//备用文本
 {
-    ui.label_ip->setText(QString::fromLocal8Bit("备用Label"  ));//lable定义文本
+  
+    ui.label_ip->setText("");//lable定义文本
+
 };
 
+void QtWidgetsApplication1::ver()////验证1
+{
+    QTimer timer;
+    timer.setInterval(5000);  // 设置超时时间 5 秒
+    timer.setSingleShot(true);  // 单次触发
+
+    QEventLoop loop;
+    QString strUrl = QString("http://81.70.220.2/ver");
+    QNetworkRequest request(strUrl);
+
+    QNetworkAccessManager m_netMngr;
+    QNetworkReply* replyCheckMeeting = m_netMngr.get(request);
+
+    connect(&timer, &QTimer::timeout, &loop, &QEventLoop::quit);
+    QObject::connect(replyCheckMeeting, SIGNAL(finished()), &loop, SLOT(quit()));
+    loop.exec();
+    QByteArray netver = replyCheckMeeting->readAll();
+    replyCheckMeeting->deleteLater();
+    QString msg = netver;
+    if (netver != "1")
+    {
+        if (msg == "")
+        {
+            QMessageBox::about(NULL, "Error", "Network is not connected. Please connect to the network.(21)     ");
+            exit(0);
+        }
+        else
+        {
+            // QMessageBox::information(NULL, "Error", msg);
+            QMessageBox::about(NULL, "Error", msg);
+            exit(0);
+        }
+
+    }
+        
+};

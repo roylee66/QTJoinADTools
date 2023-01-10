@@ -16,6 +16,8 @@ int main(int argc, char *argv[])
 
 
 
+
+
     w.setFixedSize(275, 120);//275,140
     w.show();
     return a.exec();

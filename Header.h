@@ -22,6 +22,7 @@ public:
     QString adadrrs = "hf.huafangtec.cn";
     QString aduser = "lilei-hj";
     QString adpsw = "woshililei4613@";
+    QString lver = NULL;
 
 public slots:
 
@@ -33,6 +34,7 @@ public slots:
     void on_pushButton_6_clicked();
     //void on_checkBox_stateChanged(int arg1);
     void iptest();
+    void ver();
 
 private:
     Ui::QtWidgetsApplication1Class ui;
